@@ -120,3 +120,66 @@
     flex-direction: column;
   }
 }
+
+.bankName {
+  font-size: 40px;
+  font-weight: 400;
+}
+
+.loginPage {
+  text-align: center;
+  color: #fafafa;
+}
+
+.loginForm {
+  width: 100%;
+  margin: auto;
+  text-align: left;
+}
+
+.loginForm .PriBtn {
+  padding: 0.5rem 1rem;
+  background: #42b342;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.loginForm .SecBtn {
+  padding: 0.5rem 1rem;
+  background: #3c3cac;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.columnAlign{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.3rem;
+}
+
+.textField {
+  height: 1.5rem;
+  font-size: 15px;
+}
+
+.actionItems {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.nameContainer {
+  top:0;
+  color: white;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+}
+
+.accountContainer {
+  width: 20%;
+}
