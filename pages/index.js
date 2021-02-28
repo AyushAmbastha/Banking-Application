@@ -42,9 +42,12 @@ export default function Home() {
                 />
               </Form.Group>
               <div className={styles.actionItems}>
-                <Button variant="primary" type="submit" className={styles.PriBtn}>
-                  Login
-                </Button>
+              <Link href="/profile" className="btn btn-secondary">
+                  <Button variant="primary" type="submit" className={styles.PriBtn}>
+                    Login
+                  </Button>
+                </Link>
+                
                 <Link href="/register" className="btn btn-secondary">
                   <Button className={styles.SecBtn}>
                     Create Account
