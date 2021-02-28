@@ -1,8 +1,9 @@
 import Head from 'next/head'
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 import { useState } from 'react';
+import Button from "@material-ui/core/Button";
 
 export default function Home() {
 
@@ -42,14 +43,14 @@ export default function Home() {
                 />
               </Form.Group>
               <div className={styles.actionItems}>
-              <Link href="/profile" className="btn btn-secondary">
-                  <Button variant="primary" type="submit" className={styles.PriBtn}>
+                <Link href="/profile" className="btn btn-secondary">
+                  <Button variant="contained" color="primary">
                     Login
                   </Button>
                 </Link>
-                
+
                 <Link href="/register" className="btn btn-secondary">
-                  <Button className={styles.SecBtn}>
+                  <Button variant="contained" color="secondary">
                     Create Account
                   </Button>
                 </Link>
