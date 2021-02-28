@@ -3,12 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from "@material-ui/core/Button";
+import { withTheme } from 'styled-components';
 
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    color: 'white',
   },
   paper: {
     padding: theme.spacing(2),
@@ -31,12 +33,12 @@ export default function CenteredGrid() {
         </Grid>
         <Grid item xs={3}></Grid>
         <Grid item xs={1.5}>
-            <Button variant="outlined" color="primary">
+            <Button variant="outlined" color="white">
                 Profile
             </Button>
         </Grid>
         <Grid item xs={1.5}>
-            <Button variant="outlined" color="primary">
+            <Button variant="outlined" color="white">
                 Logout
             </Button>
         </Grid>
@@ -55,28 +57,28 @@ export default function CenteredGrid() {
         
         <Grid item xs={12}>
             <Paper className={classes.paper}>
-                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
+                <p style={{ color: 'white' }} >Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
             </Paper>     
         </Grid>
         <Grid item xs={12}>
             <Paper className={classes.paper}>
-                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
+                <p style={{ color: 'white' }} >Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
             </Paper>       
         </Grid>
         <Grid item xs={12}>
             <Paper className={classes.paper}>
-                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
+                <p style={{ color: 'white' }} >Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
             </Paper>       
         </Grid>
         <Grid item xs={12}>
             <Paper className={classes.paper}>
-                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
+                <p style={{ color: 'white' }} >Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
             </Paper>       
         </Grid>
         <Grid item xs={9}></Grid>
 
         <Grid item xs={3}>
-            <Button variant="outlined" color="primary">
+            <Button variant="outlined" color="white">
                 Download
             </Button>
         </Grid>
