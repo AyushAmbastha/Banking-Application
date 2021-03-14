@@ -168,3 +168,18 @@
 .accountContainer {
   width: 20%;
 }
+
+.bankWelcome {
+  font-size: 50px;
+  font-weight: 300;
+  color: white;
+}
+
+.welcomeBtn {
+  margin: 0 1.5rem;
+}
+
+.rowAlign {
+  display: flex;
+  flex-direction: row;
+}

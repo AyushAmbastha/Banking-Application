@@ -6,88 +6,125 @@ import styles from "../styles/Profile.module.css"
 import Link from "next/link"
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import {
+    absoluteUrl,
+    getAppCookies,
+    verifyToken,
+    setLogout,
+} from '../components/utils';
 
-export default function CenteredGrid() {
-  return (
-    <div className={styles.profileBody}>
-      <Grid container>
+export default function Profile(props) {
+    const { baseApiUrl, profile } = props;
 
-        <Grid item xs={6}>
-          <p align="center">Date: {new Date().toLocaleString()}</p>
-        </Grid>
-        <Grid item xs={3}></Grid>
-        <div className={styles.gridBtn}>
-          <Grid item xs={1.5}>
-            <Button
-              variant="contained"
-              color="primary"
-            >
-              Transfer Money
-            </Button>
-          </Grid>
-        </div>
-        <div className={styles.gridBtn}>
-          <Grid item xs={1.5}>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<PhotoCamera />}
-            >
-              Upload
-            </Button>
-          </Grid>
-        </div>
-        <div className={styles.gridBtn}>
-          <Grid item xs={1.5}>
-            <Link href="/">
-              <Button variant="contained" color="secondary">
-                Logout
-              </Button>
-            </Link>
-          </Grid>
-        </div>
-        <Grid item xs={6}>
-          <h2 align="center">Account Details</h2>
-          <p align="center"> Account Number: getting from backend</p>
-          <p align="center"> Bank name: getting from backend </p>
-          <p align="center"> IFSC Code: getting from backend </p>
-          <p align="center"> Rounting Number: getting from backend  </p>
+    function onLogout(e){
+        setLogout(e)
+      }
 
-        </Grid>
-        <Grid item xs={6}></Grid>
+    return (
+        <>
+            {!profile ?
+                <>
+                    <h1>Please Login</h1>
+                </>
+                :
+                <div className={styles.profileBody}>
+                    <Grid container>
 
-        <Grid item xs={3} />
-        <Grid item xs={6}>
-          <h2 align="center">Recent Transanction</h2>
-        </Grid>
-        <Grid item xs={3} className={styles.downloadBtn}>
-          <Button variant="contained" color="primary" startIcon={<CloudUploadIcon />}>
-            Download
-            </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <Paper className={styles.transactions}>
-            <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-          </Paper>
-        </Grid>
-        <Grid item xs={12}>
-          <Paper className={styles.transactions}>
-            <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-          </Paper>
-        </Grid>
-        <Grid item xs={12}>
-          <Paper className={styles.transactions}>
-            <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-          </Paper>
-        </Grid>
-        <Grid item xs={12}>
-          <Paper className={styles.transactions}>
-            <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-          </Paper>
-        </Grid>
-        <Grid item xs={9}></Grid>
+                        <Grid item xs={6}>
+                            <p align="center">Date: {new Date().toLocaleString()}</p>
+                        </Grid>
+                        <Grid item xs={3}></Grid>
+                        <div className={styles.gridBtn}>
+                            <Grid item xs={1.5}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Transfer Money
+                                </Button>
+                            </Grid>
+                        </div>
+                        <div className={styles.gridBtn}>
+                            <Grid item xs={1.5}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<PhotoCamera />}
+                                >
+                                    Upload
+                                </Button>
+                            </Grid>
+                        </div>
+                        <div className={styles.gridBtn}>
+                            <Grid item xs={1.5}>
+                                <Link href="/">
+                                    <Button variant="contained" color="secondary" onClick={onLogout}>
+                                        Logout
+                                    </Button>
+                                </Link>
+                            </Grid>
+                        </div>
+                        <Grid item xs={6}>
+                            <h2 align="center">Account Details</h2>
+                            <p align="center"> Account Number: {profile.id}</p>
+                            <p align="center"> Email ID: {profile.email}</p>
+                            <p align="center"> Bank name: getting from backend </p>
+                            <p align="center"> IFSC Code: getting from backend </p>
+                            <p align="center"> Rounting Number: getting from backend  </p>
 
-      </Grid>
-    </div>
-  );
+                        </Grid>
+                        <Grid item xs={6}></Grid>
+
+                        <Grid item xs={3} />
+                        <Grid item xs={6}>
+                            <h2 align="center">Recent Transanctions</h2>
+                        </Grid>
+                        <Grid item xs={3} className={styles.downloadBtn}>
+                            <Button variant="contained" color="primary" startIcon={<CloudUploadIcon />}>
+                                Download
+                  </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Paper className={styles.transactions}>
+                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Paper className={styles.transactions}>
+                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Paper className={styles.transactions}>
+                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Paper className={styles.transactions}>
+                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={9}></Grid>
+
+                    </Grid>
+                </div>
+            }
+        </>
+    )
+}
+
+export async function getServerSideProps(context) {
+    const { req } = context;
+    const { origin } = absoluteUrl(req);
+
+    const baseApiUrl = `${origin}/api`;
+
+    const { token } = getAppCookies(req);
+    const profile = token ? verifyToken(token.split(' ')[1]) : '';
+    return {
+        props: {
+            baseApiUrl,
+            profile,
+        },
+    };
 }
