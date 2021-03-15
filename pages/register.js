@@ -105,12 +105,9 @@ export default function Home() {
                                 />
                             </Form.Group>
                             <div className={styles.actionItems}>
-                                <Button variant="contained" color="primary">
-                                    <Link href='/profile'>Register</Link>
-                                </Button>
 
                                 <Button variant="contained" color="primary" type="submit">
-                                    Test
+                                    Register
                                 </Button>
 
                                 <Button variant="contained" color="secondary">

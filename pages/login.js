@@ -32,7 +32,7 @@ export default function Login(props) {
   async function handleLogin(e) {
     e.preventDefault()
     const fieldsToValidate = [{ email }, { password }]
-    let data = {email, password}
+    let data = { email, password }
 
     const allFieldsEntered = validateFields(fieldsToValidate)
     if (!allFieldsEntered) {
@@ -64,64 +64,58 @@ export default function Login(props) {
   }
 
   return (
-          <div className={styles.container}>
-            <Head>
-              <title>BoM - Login</title>
-              <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <div className={styles.accountContainer}>
-              <div className={styles.loginPage}>
-                <Button variant="contained" color="default">
-                  <Link href='/'>Back to Homepage</Link>
-                </Button>
-                <div className={styles.loginForm}>
-                  <Form method="POST" onSubmit={handleLogin}>
-                    <Form.Group controlId="email" className={styles.columnAlign}>
-                      <Form.Label>Email address</Form.Label>
-                      <Form.Control
-                        type="email"
-                        name="email"
-                        placeholder="Enter email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        className={styles.textField}
-                      />
-                    </Form.Group>
-                    <Form.Group controlId="password" className={styles.columnAlign}>
-                      <Form.Label>Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        name="password"
-                        placeholder="Enter password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        className={styles.textField}
-                      />
-                    </Form.Group>
-                    <div className={styles.actionItems}>
+        <div className={styles.container}>
+          <Head>
+            <title>BoM - Login</title>
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+          <div className={styles.accountContainer}>
+            <div className={styles.loginPage}>
+              <Button variant="contained" color="default">
+                <Link href='/'>Back to Homepage</Link>
+              </Button>
+              <div className={styles.loginForm}>
+                <Form method="POST" onSubmit={handleLogin}>
+                  <Form.Group controlId="email" className={styles.columnAlign}>
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      placeholder="Enter email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      className={styles.textField}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="password" className={styles.columnAlign}>
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="password"
+                      placeholder="Enter password"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      className={styles.textField}
+                    />
+                  </Form.Group>
+                  <div className={styles.actionItems}>
 
-                      <Link href="/profile" className="btn btn-secondary">
-                        <Button variant="contained" color="primary">
-                          Login
-                        </Button>
-                      </Link>
-
-                      <Button variant="contained" color="primary" type="submit">
-                        Test
+                    <Button variant="contained" color="primary" type="submit">
+                      Login
                       </Button>
 
-                      <Link href="/register" className="btn btn-secondary">
-                        <Button variant="contained" color="secondary">
-                          Create Account
+                    <Link href="/register" className="btn btn-secondary">
+                      <Button variant="contained" color="secondary">
+                        Create Account
                         </Button>
-                      </Link>
+                    </Link>
 
-                    </div>
-                  </Form>
-                </div>
+                  </div>
+                </Form>
               </div>
             </div>
           </div>
+        </div>
   )
 }
 
