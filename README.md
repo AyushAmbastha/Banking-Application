@@ -15,3 +15,7 @@
 ## Register Page
 
 ![Register Page](./public/RegisterPage.png)
+
+## Profile Page
+
+![Profile Page](./public/ProfilePage.png)

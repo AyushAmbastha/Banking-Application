@@ -124,6 +124,7 @@
 .bankName {
   font-size: 40px;
   font-weight: 400;
+  cursor: pointer;
 }
 
 .loginPage {
@@ -135,24 +136,7 @@
   width: 100%;
   margin: auto;
   text-align: left;
-}
-
-.loginForm .PriBtn {
-  padding: 0.5rem 1rem;
-  background: #42b342;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-.loginForm .SecBtn {
-  padding: 0.5rem 1rem;
-  background: #3c3cac;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 15px;
+  font-size: larger;
 }
 
 .columnAlign{
@@ -163,7 +147,8 @@
 
 .textField {
   height: 1.5rem;
-  font-size: 15px;
+  font-size: 18px;
+  padding: 20px 10px;
 }
 
 .actionItems {
@@ -182,4 +167,19 @@
 
 .accountContainer {
   width: 20%;
+}
+
+.bankWelcome {
+  font-size: 50px;
+  font-weight: 300;
+  color: white;
+}
+
+.welcomeBtn {
+  margin: 0 1.5rem;
+}
+
+.rowAlign {
+  display: flex;
+  flex-direction: row;
 }

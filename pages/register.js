@@ -1,16 +1,40 @@
 import Head from 'next/head'
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 import { useState } from 'react';
+import Button from "@material-ui/core/Button";
+import { validateFields } from "../components/utils"
+import { useRouter } from 'next/router'
+import axios from 'axios'
 
 export default function Home() {
+
+    const router = useRouter()
 
     const [first_name, setFN] = useState('')
     const [last_name, setLN] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [cpassword, setCPassword] = useState('')
+
+    const [alertmessage, setAM] = useState(false)
+
+    const handleRegister = (e) => {
+        e.preventDefault()
+        const fieldsToValidate = [{ first_name }, { last_name }, { email }, { password }, { cpassword }]
+
+        const allFieldsEntered = validateFields(fieldsToValidate)
+        if (!allFieldsEntered) {
+            window.alert("Fields can't be empty!")
+        }
+        else if (password !== cpassword) {
+            window.alert("Passwords dont match!")
+        }
+        else {
+            console.log("ok")
+        }
+    }
 
     return (
         <div className={styles.container}>
@@ -20,8 +44,11 @@ export default function Home() {
             </Head>
             <div className={styles.accountContainer}>
                 <div className={styles.loginPage}>
+                    <Button variant="contained" color="default">
+                        <Link href='/'>Back to Homepage</Link>
+                    </Button>
                     <div className={styles.loginForm}>
-                        <Form>
+                        <Form onSubmit={handleRegister}>
                             <Form.Group controlId="first_name" className={styles.columnAlign}>
                                 <Form.Label>First name</Form.Label>
                                 <Form.Control
@@ -78,19 +105,19 @@ export default function Home() {
                                 />
                             </Form.Group>
                             <div className={styles.actionItems}>
-                            <Button variant="primary" type="submit" className={styles.PriBtn}>
-                                Register
-                            </Button>
-                            <Link href="/">
-                            <Button  className={styles.SecBtn}>
-                                Login
-                            </Button>
-                            </Link>
+
+                                <Button variant="contained" color="primary" type="submit">
+                                    Register
+                                </Button>
+
+                                <Button variant="contained" color="secondary">
+                                    <Link href='/login'>Login</Link>
+                                </Button>
                             </div>
                         </Form>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

@@ -1,0 +1,32 @@
+.profileBody {
+    margin-top: 7rem;
+    color: white;
+    flex-grow: 1;
+}
+
+.transactions {
+    margin: 0.2rem 3rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.downloadBtn {
+    align-self: center;
+    text-align: center;
+}
+
+.gridBtn {
+    margin: 0 0.5rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.blueBtn {
+    background-color: blue;
+    color: white;
+}
+
+.red {
+    background-color: red;
+    color: white;
+}
