@@ -38,24 +38,6 @@ export default function Transanction() {
         </Grid> 
         <Grid item xs={3}></Grid>
 
-        {/* <Grid item xs={3}></Grid>
-        <Grid item xs={6}>
-          <p align="center"> Available Balance: getting from backend </p>
-        </Grid> 
-        <Grid item xs={3}></Grid>
-
-        <Grid item xs={3}></Grid>
-        <Grid item xs={6}>
-          <p align="center"> Transfer to: <input></input></p> 
-        </Grid> 
-        <Grid item xs={3}></Grid>
-
-        <Grid item xs={3}></Grid>
-        <Grid item xs={6}>
-          <p align="center">Transfer Amount: getting from backend </p>
-        </Grid> 
-        <Grid item xs={3}></Grid> */}
-
         <Grid item xs={8}></Grid>
         
         <Grid item xs={4}>
