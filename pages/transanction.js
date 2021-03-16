@@ -26,29 +26,40 @@ export default function Transanction() {
           <h1 align="center">Make a Transfer</h1>
         </Grid>
 
-        <Grid item xs={3}></Grid>
         <Grid item xs={6}>  
             <Paper className={classes.paper}>
+                <h2> Online Transfer </h2>
                 <p align="center"> Transfer from: getting from backend</p>
                 <p align="center"> Available Balance: getting from backend </p>
                 <p align="center"> Transfer to: <input></input></p> 
-                <p align="center">Transfer Amount: getting from backend </p>
-            </Paper>     
+                <p align="center">Transfer Amount: <input></input> </p>
+                <Button variant="outlined" color="red">
+                  Submit
+                </Button>
+                <Button variant="outlined" color="red">
+                    Cancel
+                </Button>
+            </Paper>   
+              
          
         </Grid> 
-        <Grid item xs={3}></Grid>
+        <Grid item xs={6}>
+          <Paper className={classes.paper}>
+                <h2> Deposit check </h2>
+                <p align="center"> Front of Check: <Button variant="contained" component="label">Upload Picture <input type="file" hidden/></Button></p>
+                <p align="center"> Back of Check: <Button variant="contained" component="label">Upload Picture <input type="file" hidden/></Button> </p>
+                <p align="center"> Deposit Account Number: <input></input></p> 
+                <p align="center"> Amount: <input></input> </p>
+                <Button variant="outlined" color="red">
+                  Submit
+                </Button>
+                <Button variant="outlined" color="red">
+                    Cancel
+                </Button>
+                
+            </Paper>  
 
-        <Grid item xs={8}></Grid>
-        
-        <Grid item xs={4}>
-            <Button variant="outlined" color="red">
-               Submit
-            </Button>
-            <Button variant="outlined" color="red">
-                Cancel
-            </Button>
-            
-        </Grid> 
+        </Grid>
            
       </Grid>
     </div>
