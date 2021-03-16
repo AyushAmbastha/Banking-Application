@@ -1,0 +1,57 @@
+.transBody {
+    padding-top: 10rem;
+    color: white;
+    flex-grow: 1;
+}
+
+.transferBody {
+    margin: 0.2rem 3rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.heading {
+    text-align: center;
+}
+
+.columnAlign {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.3rem;
+}
+
+.textField {
+    height: 1.5rem;
+    font-size: 18px;
+    padding: 20px 10px;
+}
+
+.actionItems {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.transferForm {
+    width: 70%;
+    margin: auto;
+    text-align: left;
+    font-size: larger;
+}
+
+.checkButton {
+    margin-left: 2rem;
+}
+
+.TtoPButtons {
+    margin-top: 5rem;
+    text-align: center;
+}
+
+.leftmargin {
+    margin-left: 2rem;
+}
+
+.cardTitle {
+    font-weight: 400;
+}

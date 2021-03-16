@@ -6,6 +6,8 @@ import styles from "../styles/Profile.module.css"
 import Link from "next/link"
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { useState } from 'react';
+
 import {
     absoluteUrl,
     getAppCookies,
@@ -15,10 +17,32 @@ import {
 
 export default function Profile(props) {
     const { baseApiUrl, profile } = props;
+    const [balance, setBalance] = useState('')
 
-    function onLogout(e){
+    function onLogout(e) {
         setLogout(e)
-      }
+    }
+
+    async function getBalance() {
+        let data = profile.id
+        const balanceAPI = await fetch(`http://localhost:5001/balance/123456781`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+        const result = await balanceAPI.json();
+        if (!result) {
+            window.alert("Error while retrieving balance information");
+        }
+        setBalance(result[0])
+        return result[0]
+    }
+
+    const res = getBalance()
 
     return (
         <>
@@ -36,12 +60,14 @@ export default function Profile(props) {
                         <Grid item xs={3}></Grid>
                         <div className={styles.gridBtn}>
                             <Grid item xs={1.5}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                >
-                                    Transfer Money
-                                </Button>
+                                <Link href="/transaction">
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                    >
+                                        Transfer Money
+                                    </Button>
+                                </Link>
                             </Grid>
                         </div>
                         <div className={styles.gridBtn}>
@@ -68,12 +94,24 @@ export default function Profile(props) {
                             <h2 align="center">Account Details</h2>
                             <p align="center"> Account Number: {profile.id}</p>
                             <p align="center"> Email ID: {profile.email}</p>
-                            <p align="center"> Bank name: getting from backend </p>
-                            <p align="center"> IFSC Code: getting from backend </p>
-                            <p align="center"> Rounting Number: getting from backend  </p>
+                            <p align="center"> First Name: Fetch </p>
+                            <p align="center"> Last Name: Fetch </p>
+                            <p align="center"> IFSC Code: BOMT008345 </p>
+                            <p align="center"> Rounting Number: 978645362  </p>
 
                         </Grid>
-                        <Grid item xs={6}></Grid>
+                        <Grid item xs={6}>
+                            <div className={styles.balanceContainer}>
+                                <div className={styles.balance}>
+                                    <p>Checking Account</p>
+                                    <p>$ {balance ? balance : "Err"}</p>
+                                </div>
+                                <div className={styles.balance}>
+                                    <p>Savings Account</p>
+                                    <p>$ 1000</p>
+                                </div>
+                            </div>
+                        </Grid>
 
                         <Grid item xs={3} />
                         <Grid item xs={6}>

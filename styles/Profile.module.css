@@ -1,5 +1,5 @@
 .profileBody {
-    margin-top: 7rem;
+    padding-top: 7rem;
     color: white;
     flex-grow: 1;
 }
@@ -29,4 +29,22 @@
 .red {
     background-color: red;
     color: white;
+}
+
+.balanceContainer {
+    align-self: center;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    margin-left: 10rem;
+}
+
+.balance {
+    margin: 2rem 1rem;
+    box-sizing: border-box;
+    border-radius: 10%;
+    background-color: white;
+    color: black;
+    font-size: xx-large;
+    padding: 0.7rem 0.7rem;
 }
