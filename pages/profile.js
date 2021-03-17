@@ -18,9 +18,47 @@ import {
 export default function Profile(props) {
     const { baseApiUrl, profile } = props;
     const [balance, setBalance] = useState('')
+    const [accTransactions, setAccTransactions] = useState('')
 
     function onLogout(e) {
         setLogout(e)
+    }
+
+    async function getTransactionLog() {
+        let data = profile.id
+        const TransactionLogAPI = await fetch(`http://localhost:5002/mylog`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(profile.id),
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+        const result = await TransactionLogAPI.json();
+        if (!result) {
+            window.alert("Error while retrieving transaction log");
+        }
+        var transactionsHTML = ""
+        function displayTransactions(item, index) {
+            transactionsHTML += "<Grid item xs={12}><Paper className={styles.transactions}><p>Date: ";
+            transactionsHTML += item.date;
+            // Are we sending or receiving
+            if(item.account_from == profile.account_from) {
+                transactionsHTML += " Send to: ";
+                transactionsHTML += item.account_to;
+            } else {
+                transactionsHTML += " Receive from: ";
+                transactionsHTML += item.account_from;
+            }
+            transactionsHTML += " Amount: ";
+            transactionsHTML += item.amount;
+            transactionsHTML += " </p></Paper></Grid>";
+        }
+        result.forEach(displayTransactions);
+        setAccTransactions(transactionsHTML);
+        return transactionsHTML;
     }
 
     async function getBalance() {
@@ -43,6 +81,7 @@ export default function Profile(props) {
     }
 
     const res = getBalance()
+    const transactions_res = getTransactionLog();
 
     return (
         <>
@@ -122,26 +161,7 @@ export default function Profile(props) {
                                 Download
                   </Button>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={styles.transactions}>
-                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={styles.transactions}>
-                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={styles.transactions}>
-                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={styles.transactions}>
-                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-                            </Paper>
-                        </Grid>
+                        {accTransactions ? accTransactions : "<Grid item xs={12}><Paper className={styles.transactions}><p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p></Paper></Grid>"}
                         <Grid item xs={9}></Grid>
 
                     </Grid>
