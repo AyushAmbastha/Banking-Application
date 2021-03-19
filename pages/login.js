@@ -12,6 +12,7 @@ import Router from 'next/router';
 import Cookies from 'js-cookie';
 
 import ProfileBox from '../components/profile'
+var sha512 = require('js-sha512');
 
 import {
   absoluteUrl,
@@ -23,16 +24,17 @@ import {
 
 export default function Login(props) {
   const router = useRouter()
-  const { baseApiUrl, profile } = props;
+  const { token } = props;
 
-  const [email, setEmail] = useState('')
+  const [username, setUName] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
   async function handleLogin(e) {
     e.preventDefault()
-    const fieldsToValidate = [{ email }, { password }]
-    let data = { email, password }
+    const fieldsToValidate = [{ username }, { password }]
+    //let passwordHash = sha512(password)
+    let data = { "username":username, "password":password }
 
     const allFieldsEntered = validateFields(fieldsToValidate)
     if (!allFieldsEntered) {
@@ -40,7 +42,7 @@ export default function Login(props) {
     }
     else {
       setLoading(!loading)
-      const loginApi = await fetch(`${baseApiUrl}/auth`, {
+      const loginApi = await fetch(`http://localhost:5004/login`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -51,10 +53,9 @@ export default function Login(props) {
         console.error('Error:', error);
       });
       let result = await loginApi.json();
-      if (result.success && result.token) {
-        Cookies.set('token', result.token);
-        // window.location.href = referer ? referer : "/";
-        // const pathUrl = referer ? referer.lastIndexOf("/") : "/";
+      console.log(result)
+      if (result[1] == 200) {
+        Cookies.set('token', result[0]);
         Router.push('/profile');
       } else {
         window.alert("Error while loggin in! Please check your email/password");
@@ -64,6 +65,8 @@ export default function Login(props) {
   }
 
   return (
+    <>
+      { !token ?
         <div className={styles.container}>
           <Head>
             <title>BoM - Login</title>
@@ -76,14 +79,14 @@ export default function Login(props) {
               </Button>
               <div className={styles.loginForm}>
                 <Form method="POST" onSubmit={handleLogin}>
-                  <Form.Group controlId="email" className={styles.columnAlign}>
+                  <Form.Group controlId="username" className={styles.columnAlign}>
                     <Form.Label>Email address</Form.Label>
                     <Form.Control
-                      type="email"
-                      name="email"
-                      placeholder="Enter email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
+                      type="username"
+                      name="username"
+                      placeholder="Enter username"
+                      value={username}
+                      onChange={e => setUName(e.target.value)}
                       className={styles.textField}
                     />
                   </Form.Group>
@@ -116,21 +119,25 @@ export default function Login(props) {
             </div>
           </div>
         </div>
+        : 
+          <>
+            <h1>You're logged in!</h1>
+          </>
+      }
+      </>
   )
-}
 
 export async function getServerSideProps(context) {
   const { req } = context;
-  const { origin } = absoluteUrl(req);
+  //const { origin } = absoluteUrl(req);
 
-  const baseApiUrl = `${origin}/api`;
+  //const baseApiUrl = `${origin}/api`;
 
   const { token } = getAppCookies(req);
-  const profile = token ? verifyToken(token.split(' ')[1]) : '';
+  //const profile = token ? verifyToken(token.split(' ')[1]) : '';
   return {
     props: {
-      baseApiUrl,
-      profile,
+      token
     },
   };
 }

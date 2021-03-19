@@ -17,6 +17,7 @@
     "bcryptjs": "^2.4.3",
     "framer-motion": "^3.9.0",
     "js-cookie": "^2.2.1",
+    "js-sha512": "^0.8.0",
     "jsonwebtoken": "^8.5.1",
     "next": "^10.0.7",
     "react": "17.0.1",

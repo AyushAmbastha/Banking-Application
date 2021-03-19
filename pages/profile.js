@@ -16,7 +16,7 @@ import {
 } from '../components/utils';
 
 export default function Profile(props) {
-    const { baseApiUrl, profile } = props;
+    const { token } = props;
     const [balance, setBalance] = useState('')
 
     function onLogout(e) {
@@ -24,12 +24,15 @@ export default function Profile(props) {
     }
 
     async function getBalance() {
-        let data = profile.id
-        const balanceAPI = await fetch(`http://localhost:5001/balance/123456781`, {
+        //Need to get customer ID from somewhere to call this query. 
+        //Need to send token and if its valid return all info?
+        //Change API to just take the JWT token and return balance
+        const balanceAPI = await fetch(`http://localhost:5001/balance`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                'jwt': token,
             },
         }).catch(error => {
             console.error('Error:', error);
@@ -46,7 +49,7 @@ export default function Profile(props) {
 
     return (
         <>
-            {!profile ?
+            {!token ?
                 <>
                     <h1>Please Login</h1>
                 </>
@@ -92,12 +95,12 @@ export default function Profile(props) {
                         </div>
                         <Grid item xs={6}>
                             <h2 align="center">Account Details</h2>
-                            <p align="center"> Account Number: {profile.id}</p>
-                            <p align="center"> Email ID: {profile.email}</p>
+                            <p align="center"> Account Number:</p>
+                            <p align="center"> Email ID:</p>
                             <p align="center"> First Name: Fetch </p>
                             <p align="center"> Last Name: Fetch </p>
                             <p align="center"> IFSC Code: BOMT008345 </p>
-                            <p align="center"> Rounting Number: 978645362  </p>
+                            <p align="center"> Routing Number: 978645362  </p>
 
                         </Grid>
                         <Grid item xs={6}>
@@ -153,16 +156,11 @@ export default function Profile(props) {
 
 export async function getServerSideProps(context) {
     const { req } = context;
-    const { origin } = absoluteUrl(req);
-
-    const baseApiUrl = `${origin}/api`;
-
     const { token } = getAppCookies(req);
-    const profile = token ? verifyToken(token.split(' ')[1]) : '';
+    //const profile = token ? verifyToken(token.split(' ')[1]) : '';
     return {
         props: {
-            baseApiUrl,
-            profile,
+            token
         },
     };
 }

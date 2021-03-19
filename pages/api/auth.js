@@ -76,7 +76,7 @@ export default (req, res) => {
                   payload,
                   KEY,
                   {
-                    expiresIn: 600, // 1 year in seconds
+                    expiresIn: 6000000, // 1 year in seconds
                   },
                   (err, token) => {
                     /* Send succes with token */
