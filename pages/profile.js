@@ -6,7 +6,9 @@ import styles from "../styles/Profile.module.css"
 import Link from "next/link"
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import { useState } from 'react';
+import { saveAs } from 'file-saver';
 
 import {
     getAppCookies,
@@ -23,6 +25,16 @@ export default function Profile(props) {
 
     function onLogout(e) {
         setLogout(e)
+    }
+
+    function downloadImages() {
+        axios.get('http://localhost:5003/download', {responseType: 'arraybuffer'})
+        .then((res)=>{
+            console.log(res)
+            const blob = new Blob([res.data], { type: "application/zip" })
+            saveAs(blob, "CheckImages.zip")
+        })
+        console.log("Completed API Call")
     }
 
     async function getBalance() {
@@ -162,8 +174,19 @@ export default function Profile(props) {
                             </div>
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid item xs={3}></Grid>
+                        <Grid item xs={6}>
                             <h2 align="center">Recent Transanctions</h2>
+                        </Grid>
+                        <Grid item xs={3}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<GetAppIcon />}
+                                    onClick={downloadImages}
+                                >
+                                    Download Recent Check Images
+                                </Button>
                         </Grid>
 
                         {TransactionLogs.map((data) => (

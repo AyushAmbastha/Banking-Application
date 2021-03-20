@@ -84,15 +84,11 @@ export default function Transactions(props) {
         const formData = new FormData()
         formData.append('account_from', account_from_check)
         formData.append('account_to', account_to_check)
-        formData.append('', selectedImage)
+        formData.append('file', selectedImage)
 
         fetch(`http://localhost:5003/file-upload`, {
             method: 'POST',
-            credentials: 'omit',
             headers: {
-                Accept: 'application/json',
-                'Content-Type': 'multipart/form-data',
-                'Access-Control-Allow-Credentials': true,
                 'jwt': res,
             },
             body: formData,
@@ -208,6 +204,8 @@ export default function Transactions(props) {
                                         <Button variant="contained" component="label">
                                             <input 
                                             type="file" 
+                                            id="image"
+                                            name="file"
                                             accept=".png, .jpg, .jpeg"
                                             onChange={handleImageChange} 
                                             />
