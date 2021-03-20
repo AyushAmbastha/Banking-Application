@@ -18,7 +18,39 @@ export default function Profile(props) {
 
     function onLogout(e){
         setLogout(e)
+<<<<<<< Updated upstream
       }
+=======
+    }
+
+    function handleDownloadButtonClick(){
+        console.log(123)
+    }
+
+    async function getBalance() {
+        //Need to get customer ID from somewhere to call this query. 
+        //Need to send token and if its valid return all info?
+        //Change API to just take the JWT token and return balance
+        const balanceAPI = await fetch(`http://localhost:5001/balance`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'jwt': token,
+            },
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+        const result = await balanceAPI.json();
+        if (!result) {
+            window.alert("Error while retrieving balance information");
+        }
+        setBalance(result[0])
+        return result[0]
+    }
+
+    const res = getBalance()
+>>>>>>> Stashed changes
 
     return (
         <>
@@ -80,9 +112,9 @@ export default function Profile(props) {
                             <h2 align="center">Recent Transanctions</h2>
                         </Grid>
                         <Grid item xs={3} className={styles.downloadBtn}>
-                            <Button variant="contained" color="primary" startIcon={<CloudUploadIcon />}>
+                            <Button onclick={this.handleDownloadButtonClick} variant="contained" color="primary" startIcon={<CloudUploadIcon />}>
                                 Download
-                  </Button>
+                            </Button>
                         </Grid>
                         <Grid item xs={12}>
                             <Paper className={styles.transactions}>
