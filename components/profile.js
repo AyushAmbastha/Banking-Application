@@ -8,14 +8,12 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import {
-  absoluteUrl,
   getAppCookies,
-  verifyToken,
   setLogout,
 } from './utils';
 
 export default function ProfileBox(props) {
-  const { baseApiUrl, profile } = props;
+  const { token } = props;
 
   function onLogout(e){
     setLogout(e)
@@ -107,16 +105,10 @@ export default function ProfileBox(props) {
 
 export async function getServerSideProps(context) {
   const { req } = context;
-  const { origin } = absoluteUrl(req);
-
-  const baseApiUrl = `${origin}/api`;
-
   const { token } = getAppCookies(req);
-  const profile = token ? verifyToken(token.split(' ')[1]) : '';
   return {
     props: {
-      baseApiUrl,
-      profile,
+      token
     },
   };
 }

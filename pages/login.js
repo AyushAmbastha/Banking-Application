@@ -6,25 +6,17 @@ import { useState } from 'react';
 import Button from "@material-ui/core/Button";
 import { validateFields } from "../components/utils"
 import { useRouter } from 'next/router'
-import axios from 'axios'
-import FLASK_API_URL from '../components/utils'
 import Router from 'next/router';
 import Cookies from 'js-cookie';
 
-import ProfileBox from '../components/profile'
-var sha512 = require('js-sha512');
-
 import {
-  absoluteUrl,
-  getAppCookies,
-  verifyToken,
-  setLogout,
+  getAppCookies
 } from '../components/utils';
 
 
 export default function Login(props) {
-  const router = useRouter()
-  const { token } = props;
+  
+  const { res } = props;
 
   const [username, setUName] = useState('')
   const [password, setPassword] = useState('')
@@ -66,7 +58,11 @@ export default function Login(props) {
 
   return (
     <>
-      { !token ?
+        {res ?
+            <>
+                <h1>You're Already logged in!</h1>
+            </>
+            :
         <div className={styles.container}>
           <Head>
             <title>BoM - Login</title>
@@ -119,25 +115,22 @@ export default function Login(props) {
             </div>
           </div>
         </div>
-        : 
-          <>
-            <h1>You're logged in!</h1>
-          </>
-      }
-      </>
+}
+        </>
   )
+  }
 
 export async function getServerSideProps(context) {
-  const { req } = context;
-  //const { origin } = absoluteUrl(req);
-
-  //const baseApiUrl = `${origin}/api`;
-
-  const { token } = getAppCookies(req);
-  //const profile = token ? verifyToken(token.split(' ')[1]) : '';
-  return {
-    props: {
-      token
-    },
-  };
+    const { req } = context;
+    const { token } = getAppCookies(req);
+    let res = false
+    if (token) {
+        res = token
+    }
+    //const profile = token ? verifyToken(token.split(' ')[1]) : '';
+    return {
+        props: {
+            res
+        },
+    };
 }

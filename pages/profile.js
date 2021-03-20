@@ -9,15 +9,17 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useState } from 'react';
 
 import {
-    absoluteUrl,
     getAppCookies,
-    verifyToken,
     setLogout,
 } from '../components/utils';
 
 export default function Profile(props) {
-    const { token } = props;
+    const { res } = props;
     const [balance, setBalance] = useState('')
+    const [profile, setProfile] = useState('')
+    const [TransactionLogs, setTransactionLogs] = useState([])
+
+    console.log(res)
 
     function onLogout(e) {
         setLogout(e)
@@ -32,7 +34,7 @@ export default function Profile(props) {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'jwt': token,
+                'jwt': res,
             },
         }).catch(error => {
             console.error('Error:', error);
@@ -45,11 +47,56 @@ export default function Profile(props) {
         return result[0]
     }
 
-    const res = getBalance()
+    async function getProfile() {
+        //Need to get customer ID from somewhere to call this query. 
+        //Need to send token and if its valid return all info?
+        //Change API to just take the JWT token and return balance
+        const profileApi = await fetch(`http://localhost:5000/profile`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'jwt': res,
+            },
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+        const result = await profileApi.json();
+        if (profileApi.status != 200) {
+            window.alert("Error while retrieving profile info");
+        }
+        setProfile(result[0])
+        console.log(profile)
+        return result[0]
+    }
+
+
+    async function getTransactionLogs() {
+        const LogsApi = await fetch(`http://localhost:5002/mylog`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'jwt': res,
+            },
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+        const result = await LogsApi.json();
+        if (!result) {
+            window.alert("Error while retrieving transaction logs");
+        }
+        setTransactionLogs(result) //Returning as an indexed structure
+        return result[0]
+    }
+
+    const balancecaller = getBalance()
+    const tlogs = getTransactionLogs()
+    const profileInfo = getProfile()
 
     return (
         <>
-            {!token ?
+            {!res ?
                 <>
                     <h1>Please Login</h1>
                 </>
@@ -95,10 +142,9 @@ export default function Profile(props) {
                         </div>
                         <Grid item xs={6}>
                             <h2 align="center">Account Details</h2>
-                            <p align="center"> Account Number:</p>
-                            <p align="center"> Email ID:</p>
-                            <p align="center"> First Name: Fetch </p>
-                            <p align="center"> Last Name: Fetch </p>
+                            <p align="center"> First Name: {profile.FirstName ? profile.FirstName : "Err"} </p>
+                            <p align="center"> Last Name: {profile.LastName ? profile.LastName : "Err"} </p>
+                            <p align="center"> Email ID: {profile.Email ? profile.Email : "Err"}</p>
                             <p align="center"> IFSC Code: BOMT008345 </p>
                             <p align="center"> Routing Number: 978645362  </p>
 
@@ -116,36 +162,17 @@ export default function Profile(props) {
                             </div>
                         </Grid>
 
-                        <Grid item xs={3} />
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
                             <h2 align="center">Recent Transanctions</h2>
                         </Grid>
-                        <Grid item xs={3} className={styles.downloadBtn}>
-                            <Button variant="contained" color="primary" startIcon={<CloudUploadIcon />}>
-                                Download
-                  </Button>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={styles.transactions}>
-                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={styles.transactions}>
-                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={styles.transactions}>
-                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={styles.transactions}>
-                                <p>Date: 02/01/2021 Send: getting from backend Amount: getting from backend</p>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={9}></Grid>
+
+                        {TransactionLogs.map((data) => (
+                            <Grid item xs={12}>
+                                <Paper className={styles.transactions}>
+                                    <p>Account From: {data[3]} Account To: {data[4]} Amount={data[5]}</p>
+                                </Paper>
+                            </Grid>
+                        ))}
 
                     </Grid>
                 </div>
@@ -157,10 +184,14 @@ export default function Profile(props) {
 export async function getServerSideProps(context) {
     const { req } = context;
     const { token } = getAppCookies(req);
+    let res = false
+    if (token) {
+        res = token
+    }
     //const profile = token ? verifyToken(token.split(' ')[1]) : '';
     return {
         props: {
-            token
+            res
         },
     };
 }

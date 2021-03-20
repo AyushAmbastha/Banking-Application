@@ -17,13 +17,17 @@ import {
 } from '../components/utils';
 
 export default function Transactions(props) {
-    const { baseApiUrl, profile, token } = props;
+    const { res } = props;
 
     const [account_from, setAccFrom] = useState('')
     const [ABA_from, setABAFrom] = useState('')
     const [account_to, setAccTo] = useState('')
     const [ABA_to, setABATo] = useState('')
     const [amount, setAmount] = useState('')
+
+    const [account_from_check, setAccFromCheck] = useState('')
+    const [account_to_check, setAccToCheck] = useState('')
+    const [selectedImage, setImage] = useState()
     
 
     function onLogout(e) {
@@ -37,29 +41,73 @@ export default function Transactions(props) {
         "ABA_to":ABA_to, 
         "account_from":account_from, 
         "ABA_from":ABA_from, 
-        "jwt":token}
-        const TransferApi = await fetch(`http://localhost:5001/update`, {
+        "jwt":res}
+
+        fetch(`http://localhost:5001/update`, {
             method: 'POST',
+            credentials: 'omit',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Credentials': true,
             },
             body: JSON.stringify(data),
           }).catch(error => {
-            console.log('Error: !@###@#!', error);
+            console.error('Error:', error);
           });
-          let result = await TransferApi.json();
-          console.log(result)
-          if (result[1] == 200) {
-            Router.push('/profile');
-          } else {
-            window.alert("Error");
-          }
+        
+        fetch(`http://localhost:5002/log`, {
+            method: 'POST',
+            credentials: 'omit',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Credentials': true,
+            },
+            body: JSON.stringify(data),
+          }).catch(error => {
+            console.error('Error:', error);
+          });
+
+        Router.push('/profile')
+    }
+
+    const handleImageChange = event => {
+        setImage(event.target.files[0])
+    }
+
+    const handleCheckDeposit = () => {
+        if (!selectedImage) {
+            window.alert("Please attach an Image!")
+        }
+
+        const formData = new FormData()
+        formData.append('account_from', account_from_check)
+        formData.append('account_to', account_to_check)
+        formData.append('', selectedImage)
+
+        fetch(`http://localhost:5003/file-upload`, {
+            method: 'POST',
+            credentials: 'omit',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'multipart/form-data',
+                'Access-Control-Allow-Credentials': true,
+                'jwt': res,
+            },
+            body: formData,
+          }).catch(error => {
+            console.error('Error:', error);
+          });
+        
+        console.log("image uploaded")
+        Router.push('/profile')
+
     }
 
     return (
         <>
-            {!token ?
+            {!res ?
                 <>
                     <h1>Please Login</h1>
                 </>
@@ -135,37 +183,34 @@ export default function Transactions(props) {
                             <div className={styles.transferForm}>
                                 <h1 className={styles.cardTitle}>Deposit Checks</h1>
                                 <p>Note: Check deposits take 2-3 business days to be processed</p>
-                                <Form method="POST">
-                                    <Form.Group controlId="email" className={styles.columnAlign}>
-                                        <Form.Label>Who do you want to send it to?</Form.Label>
+                                <Form method="POST" onSubmit={handleCheckDeposit}>
+                                    <Form.Group controlId="account_from" className={styles.columnAlign}>
+                                        <Form.Label>Sender's Information</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="account_from"
+                                            placeholder="Account number"
+                                            className={styles.textField}
+                                            onChange={e => setAccFromCheck(e.target.value)}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group controlId="account_to" className={styles.columnAlign}>
+                                        <Form.Label>Receiver's Information</Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="account_to"
                                             placeholder="Account number"
                                             className={styles.textField}
+                                            onChange={e => setAccToCheck(e.target.value)}
                                         />
                                     </Form.Group>
-                                    <Form.Group controlId="email" className={styles.columnAlign}>
-                                        <Form.Control
-                                            type="text"
-                                            name="account_to"
-                                            placeholder="ABA number"
-                                            className={styles.textField}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group controlId="email" className={styles.columnAlign}>
-                                        <Form.Label>Amount</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="account_to"
-                                            placeholder="Enter amount in $"
-                                            className={styles.textField}
-                                        />
-                                    </Form.Group>
-                                    <p> Check Image:
+                                    <p> Upload Picture :
                                         <Button variant="contained" component="label">
-                                            Upload Picture
-                                            <input type="file" hidden />
+                                            <input 
+                                            type="file" 
+                                            accept=".png, .jpg, .jpeg"
+                                            onChange={handleImageChange} 
+                                            />
                                         </Button>
                                     </p>
                                     <div className={styles.actionItems}>
@@ -201,10 +246,15 @@ export default function Transactions(props) {
 export async function getServerSideProps(context) {
     const { req } = context;
     const { token } = getAppCookies(req);
+    let res = false
+    if (token) {
+        res = token
+    }
+    console.log(res)
     //const profile = token ? verifyToken(token.split(' ')[1]) : '';
     return {
         props: {
-            token
+            res
         },
     };
 }
