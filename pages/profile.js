@@ -18,13 +18,34 @@ export default function Profile(props) {
 
     function onLogout(e){
         setLogout(e)
-<<<<<<< Updated upstream
-      }
-=======
     }
 
     function handleDownloadButtonClick(){
-        console.log(123)
+        fetch('http://localhost:5001/download', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              //Body
+            })
+          }).then((response)=>{
+            //here is youu want zip data 
+            var zip = new JSZip();
+            var zipData = response.data; 
+            // Add an top-level, arbitrary text file with contents
+            zip.file("response.txt", zipData);
+            
+            // Generate the zip file asynchronously
+            zip.generateAsync({type:"blob"}).then(function(content) {
+                // Force down of the Zip file
+                saveAs(content, "zipFile.zip");
+            });
+          
+          }).catch((error)=>{
+           console.log(error);
+          });
     }
 
     async function getBalance() {
@@ -50,7 +71,6 @@ export default function Profile(props) {
     }
 
     const res = getBalance()
->>>>>>> Stashed changes
 
     return (
         <>
